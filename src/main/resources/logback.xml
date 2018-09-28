@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!--  邮件 -->
+    <!-- SMTP server的地址，必需指定。如网易的SMTP服务器地址是： smtp.163.com -->
+    <!--填入要发送邮件的smtp服务器地址(问DBA或者经理啥的就知道)-->
+    <property name="smtpHost" value="smtp.exmail.qq.com"/>
+    <!-- SMTP server的端口地址。默认值：25 -->
+    <property name="smtpPort" value="465"/>
+    <!-- 发送邮件账号，默认为null -->
+    <property name="username" value="zq@sxw.cn"/><!--发件人账号-->
+    <!-- 发送邮件密码，默认为null -->
+    <property name="password" value="HelloKitty332"/><!--发件人密码-->
+    <!-- 如果设置为true，appender将会使用SSL连接到日志服务器。默认值：false -->
+    <property name="SSL" value="true"/>
+    <!-- 指定发送到那个邮箱，可设置多个<to>属性，指定多个目的邮箱 -->
+    <property name="email_to" value="452592327@qq.com"/><!--收件人账号多个可以逗号隔开-->
+    <!-- 指定发件人名称。如果设置成“&lt;ADMIN&gt; ”，则邮件发件人将会是“<ADMIN> ” -->
+    <property name="email_from" value="zq@sxw.cn"/>
+    <!-- 指定emial的标题，它需要满足PatternLayout中的格式要求。如果设置成“Log: %logger - %msg ”，就案例来讲，则发送邮件时，标题为“【Error】: com.foo.Bar - Hello World ”。 默认值："%logger{20} - %m". -->
+    <property name="email_subject" value="【Error】: %logger"/>
+    <!-- ERROR邮件发送 -->
+    <appender name="EMAILTO" class="ch.qos.logback.classic.net.SMTPAppender">
+        <smtpHost>${smtpHost}</smtpHost>
+        <smtpPort>${smtpPort}</smtpPort>
+        <username>${username}</username>
+        <password>${password}</password>
+        <asynchronousSending>true</asynchronousSending>
+        <SSL>${SSL}</SSL>
+        <to>${email_to}</to>
+        <from>${email_from}</from>
+        <subject>${email_subject}</subject>
+        <layout class="ch.qos.logback.classic.html.HTMLLayout">
+            <Pattern>%date%level%mdc%thread%logger{26}%message%ex{full}</Pattern>
+        </layout>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+
+        <!-- 基于标记的发送邮件 这里我们加入一个标记DONE，发送日志时只需加入此标记即可，如有多个标记加入多个<maker></maker>标签即可
+        <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+            <marker>DONE</marker>
+        </evaluator>
+        -->
+        <!--每个电子邮件只发一个日志条目-->
+        <cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTracker">
+            <bufferSize>1</bufferSize>
+        </cyclicBufferTracker>
+
+    </appender>
+
+    <root level="ERROR">
+        <appender-ref ref="EMAILTO"/>
+    </root>
+</configuration>
