@@ -39,13 +39,6 @@ public class JDBookParser {
 
     }
 
-    private static JDBook element2book(Elements bookEle) {
-        String bookID = bookEle.attr("data-sku");
-        String bookPrice = bookEle.select("div[class=p-price]").select("strong[class=J_price]").select("i").text();
-        String bookName = bookEle.select("div[class=p-name]").select("em").text();
-        return new JDBook(bookID, bookName, bookPrice);
-    }
-
     private static JDBook element2book(Element bookEle) {
         String bookID = bookEle.attr("data-sku");
         String bookPrice = bookEle.select("div[class=p-price]").select("strong[class=J_price]").select("i").text();

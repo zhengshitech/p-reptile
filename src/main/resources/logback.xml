@@ -45,10 +45,18 @@
         <cyclicBufferTracker class="ch.qos.logback.core.spi.CyclicBufferTracker">
             <bufferSize>1</bufferSize>
         </cyclicBufferTracker>
-
     </appender>
 
+    <!--控制台输出 -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %-5level[%thread]%logger{56}.%method:%L -%msg%n</Pattern>
+        </encoder>
+    </appender>
     <root level="ERROR">
         <appender-ref ref="EMAILTO"/>
+    </root>
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
     </root>
 </configuration>
